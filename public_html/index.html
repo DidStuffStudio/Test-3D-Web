@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>&lt;model-viewer&gt; example</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- The following libraries and polyfills are recommended to maximize browser support -->
+    <!-- NOTE: you must adjust the paths as appropriate for your project -->
+    
+    <!-- 💁 OPTIONAL: The :focus-visible polyfill removes the focus ring for some input types -->
+    <script src="https://unpkg.com/focus-visible@5.0.2/dist/focus-visible.js" defer></script>
+
+  </head> 
+<body>
+  <div id="card">
+    <!-- All you need to put beautiful, interactive 3D content on your site:
+	
+	ios-src="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b/Astronaut.usdz?v=1569545377878"
+-->
+	<model-viewer camera-controls camera-orbit="0deg 70deg auto" min-camera-orbit="auto 70deg auto" max-camera-orbit="auto 70deg auto" disable-zoom disable-pan auto-rotate poster="images/Chair.webp"  shadow-intensity="1" src="models/Chair.glb" alt="A Couch"></model-viewer>
+  </div>
+
+  <div id="card">
+    <!-- All you need to put beautiful, interactive 3D content on your site:
+	
+	ios-src="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b/Astronaut.usdz?v=1569545377878"
+-->
+	<model-viewer camera-controls camera-orbit="0deg 70deg auto" min-camera-orbit="auto 70deg auto" max-camera-orbit="auto 70deg auto" disable-pan auto-rotate poster="images/Chair.webp"  shadow-intensity="1" src="models/Chair.glb" alt="A Couch"></model-viewer>
+  </div>
+
+  <div id="card">
+    <!-- All you need to put beautiful, interactive 3D content on your site:
+	
+	ios-src="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b/Astronaut.usdz?v=1569545377878"
+-->
+	<model-viewer 
+		camera-controls camera-orbit="0deg 70deg auto"
+		min-camera-orbit="auto 70deg auto"
+		max-camera-orbit="auto 70deg auto"
+		disable-zoom
+		disable-pan
+		auto-rotate poster="images/Chair.webp"
+		shadow-intensity="1"
+		src="models/Chair.glb"
+		alt="A Couch">
+		<button class="hotspot" slot="hotspot-leather" data-position="0 0.4 0" data-normal="-0.73 0.05 0.69">
+			<div class="annotation">Genuine Italian Leather</div>
+		  </button>
+		  <button class="hotspot" slot="hotspot-backrest" data-position="0 0.7 -0.5" data-normal="-0.73 0.05 0.69">
+			<div class="annotation">Spring loaded backrest</div>
+		  </button>
+	</model-viewer>
+  </div>
+
+
+
+
+  <div>
+  <button class="button" role="button">Black</button>
+  <button class="button" role="button">Brown</button>
+  <button class="button" role="button">Beige</button>
+	</div>
+
+  
+  <!-- 💁 Include both scripts below to support all browsers! -->
+
+  <!-- Loads <model-viewer> for modern browsers: -->
+  <script type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+  </script>
+</body>
+</html>
