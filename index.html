@@ -1,143 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>&lt;model-viewer&gt; example</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="css/style.css">
-    
-    <!-- The following libraries and polyfills are recommended to maximize browser support -->
-    <!-- NOTE: you must adjust the paths as appropriate for your project -->
-    
-    <!-- 💁 OPTIONAL: The :focus-visible polyfill removes the focus ring for some input types -->
-    <script src="https://unpkg.com/focus-visible@5.0.2/dist/focus-visible.js" defer></script>
-    <script src="jquery-nice-select-1.1.0/js/jquery.js"></script> 
-    <script src="jquery-nice-select-1.1.0/js/jquery.nice-select.js"></script>
-    <script src="jquery-nice-select-1.1.0/js/fastclick.js"></script>
-    <link rel="stylesheet" href="jquery-nice-select-1.1.0/css/nice-select.css">
- 
+<head>
+  <title>&lt;model-viewer&gt; example</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 
-  </head> 
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- The following libraries and polyfills are recommended to maximize browser support -->
+  <!-- NOTE: you must adjust the paths as appropriate for your project -->
+
+  <!-- 💁 OPTIONAL: The :focus-visible polyfill removes the focus ring for some input types -->
+  <script src="https://unpkg.com/focus-visible@5.0.2/dist/focus-visible.js" defer></script>
+  <script src="jquery-nice-select-1.1.0/js/jquery.js"></script>
+  <script src="jquery-nice-select-1.1.0/js/jquery.nice-select.js"></script>
+  <script src="jquery-nice-select-1.1.0/js/fastclick.js"></script>
+  <link rel="stylesheet" href="jquery-nice-select-1.1.0/css/nice-select.css">
+
+
+</head>
+
 <body>
 
-<!--   <script>
-    $(document).ready(function() {
-      $('select:not(.ignore)').niceSelect();      
-      FastClick.attach(document.body);
+
+    <model-viewer id="ChairMaterial" camera-orbit="-139.8deg 77deg 5.109m" field-of-view="22.98deg" camera-controls
+      camera-orbit="0deg 70deg auto" min-camera-orbit="auto 70deg auto" max-camera-orbit="auto 70deg auto" disable-pan
+      auto-rotate poster="images/poster.webp" shadow-intensity="1" src="models/model/TableAndChair.glb" alt="A Couch">
+      <div class="progress-bar hide" slot="progress-bar">
+        <div class="update-bar"></div>
+      </div>
+
+        <select id="variant">
+        </select>
+
+
+    </model-viewer>
+
+    <script>
+      $(document).ready(function () {
+        $('select').niceSelect();
+      });
+      const modelViewerVariants = document.querySelector("model-viewer#ChairMaterial");
+      const select = document.querySelector('#variant');
+
+      modelViewerVariants.addEventListener('load', () => {
+        const names = modelViewerVariants.availableVariants;
+        for (const name of names) {
+          const option = document.createElement('option');
+          option.value = name;
+          option.textContent = name;
+     
+          select.appendChild(option);
+         
+        }
+
+        select.addEventListener('input', (event) => {
+            console.log('cricket clicked', event);
+            modelViewerVariants.variantName = event.target.value;
+          });
+       
+        $('select').niceSelect('update');
+          
+   
+       
     });
-  </script> -->
-  <p style="margin-top:100px">Example of user being able to rotate the model. They are not able to zoom, pan or change materials.</p>
-  <div id="ChairBasic">
-    <!-- All you need to put beautiful, interactive 3D content on your site:
-	
-	ios-src="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b/Astronaut.usdz?v=1569545377878"
--->
-	<model-viewer camera-controls camera-orbit="0deg 70deg auto" min-camera-orbit="auto 70deg auto" max-camera-orbit="auto 70deg auto" disable-zoom disable-pan auto-rotate poster="images/Chair.webp"  shadow-intensity="1" src="models/Chair.glb" alt="A Couch"></model-viewer>
-  </div>
-
-
-  
-
-
-  <p style="margin-top:300px">Example of user being able to rotate and zoom in on the model.</p>
-  <div id="ChairZoom">
-    <!-- All you need to put beautiful, interactive 3D content on your site:
-	
-	ios-src="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b/Astronaut.usdz?v=1569545377878"
--->
-	<model-viewer camera-controls camera-orbit="0deg 70deg auto" min-camera-orbit="auto 70deg auto" max-camera-orbit="auto 70deg auto" disable-pan auto-rotate poster="images/Chair.webp"  shadow-intensity="1" src="models/Chair.glb" alt="A Couch"></model-viewer>
-  </div>
-
-
-
-
-  <p style="margin-top:300px">Example of user being able to rotate the model with labels or hotspots that highlight features.</p>
-  <div id="ChairTags">
-    <!-- All you need to put beautiful, interactive 3D content on your site:
-	
-	ios-src="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b/Astronaut.usdz?v=1569545377878"
--->
-	<model-viewer 
-		camera-controls camera-orbit="0deg 70deg auto"
-		min-camera-orbit="auto 70deg auto"
-		max-camera-orbit="auto 70deg auto"
-		disable-zoom
-		disable-pan
-		auto-rotate poster="images/Chair.webp"
-		shadow-intensity="1"
-		src="models/Chair.glb"
-		alt="A Couch">
-		<button class="hotspot" slot="hotspot-leather" data-position="0 0.4 0" data-normal="-0.73 0.05 0.69">
-			<div class="annotation">Genuine Italian Leather</div>
-		  </button>
-		  <button class="hotspot" slot="hotspot-backrest" data-position="0 0.7 -0.5" data-normal="-0.73 0.05 0.69">
-			<div class="annotation">Spring loaded backrest</div>
-		  </button>
-	</model-viewer>
-  </div>
-
-
-
-
-
-  <p style="margin-top:300px">Example of user being able to rotate and zoom in on the model as well as change the material to their liking.</p>
-  <div >
-    <!-- All you need to put beautiful, interactive 3D content on your site:
-	
-	ios-src="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b/Astronaut.usdz?v=1569545377878"
--->
-	<model-viewer id="ChairMaterial" camera-controls camera-orbit="0deg 70deg auto" min-camera-orbit="auto 70deg auto" max-camera-orbit="auto 70deg auto" disable-pan auto-rotate poster="images/Chair.webp"  shadow-intensity="1" src="models/ChairVariants.glb" alt="A Couch"></model-viewer>
-<!--   <div class="controls">
-    <div>Variant: <select id="variant"></select></div>
-  </div>   -->
-
-  <div class="box">
-    <label>Color</label>
-    <select class="wide"id="variant">
-      <!-- <option value="Black" id="BlackBtn">Black Leather</option>
-        <option value="Brown"id="BrownBtn">Brown Leather</option>
-        <option value="Light"id="LightBtn">Light Grey Leather</option> -->
-  
-    </select>
-  </div>
-</div>
-
 
     
-  <script>
-const modelViewerVariants = document.querySelector("model-viewer#ChairMaterial");
-const select = document.querySelector('#variant');
-
-modelViewerVariants.addEventListener('load', () => {
-  const names = modelViewerVariants.availableVariants;
-  for (const name of names) {
-    const option = document.createElement('option');
-    option.value = name;
-    option.textContent = name;
-    select.appendChild(option);
-  }
-
-  select.addEventListener('input', (event) => {
-  modelViewerVariants.variantName = event.target.value;
-  
-});
-$('select').niceSelect('update');
-});
 
 
 
 
-
-</script>
-<p style="margin-top:200px">..</p>
-  
-  <!-- 💁 Include both scripts below to support all browsers! -->
-
-  <!-- Loads <model-viewer> for modern browsers: -->
-  <script type="module"
-      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
-  </script>
+    </script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+    </script>
 </body>
+
 </html>
