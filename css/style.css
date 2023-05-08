@@ -1,29 +1,62 @@
 body {
-  margin: 1em;
   padding: 0;
   font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif;
   color: #244376;
 }
 
 
-#card {
+/* #card {
   margin: 3em auto;
   display: flex;
   flex-direction: column;
-  max-width: 2000;
   height: 100%;
   border-radius: 6px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
   overflow: hidden;
-}
+} */
+
 
 model-viewer {
-  width: 100%;
-  height: 400px;
-  background-color: #dddddd;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff;
   --poster-color: #ffffff00;
 }
 
+  
+.progress-bar {
+  display: block;
+  width: 33%;
+  height: 10%;
+  max-height: 2%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  border-radius: 25px;
+  box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.5), 0px 0px 5px 1px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.progress-bar.hide {
+  visibility: hidden;
+  transition: visibility 0.3s;
+}
+
+.update-bar {
+  background-color: rgba(255, 255, 255, 0.9);
+  width: 0%;
+  height: 100%;
+  border-radius: 25px;
+  float: left;
+  transition: width 0.3s;
+}
+
+
+.select-box{
+  margin: 2%;
+}
 
 footer {
   display: flex;
@@ -131,3 +164,127 @@ footer {
   /* This keeps child nodes hidden while the element loads */
   :not(:defined) > * {
     display: none;}
+
+
+
+    .selectdiv {
+      position: relative;
+      /*Don't really need this just for demo styling*/
+      
+      float: left;
+      min-width: 200px;
+      margin: 5%;
+      border: #25292e;
+      border-radius: 50px;
+    }
+    
+    /* IE11 hide native button (thanks Matt!) */
+    select::-ms-expand {
+    display: none;
+    }
+   
+    
+    .selectdiv:after {
+      content: '<>';
+      font: 17px "Consolas", monospace;
+      color: #333;
+      -webkit-transform: rotate(90deg);
+      -moz-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+      transform: rotate(90deg);
+      right: 11px;
+      /*Adjust for position however you want*/
+      
+      top: 18px;
+      padding: 0 0 2px;
+      border-bottom: 1px solid #999;
+      /*left line */
+      
+      position: absolute;
+      pointer-events: none;
+    }
+    
+    .selectdiv select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      /* Add some styling */
+      
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      height: 50px;
+      float: right;
+      margin: 5px 0px;
+      padding: 0px 24px;
+      font-size: 16px;
+      line-height: 1.75;
+      color: #333;
+      background-color: #ffffff;
+      background-image: none;
+      border: 1px solid #cccccc;
+      border-radius: 50px;
+      -ms-word-break: normal;
+      word-break: normal;
+    }
+
+
+    #ar-button {
+      background-image: url(ar_icon.png);
+      background-repeat: no-repeat;
+      background-size: 20px 20px;
+      background-position: 12px 50%;
+      background-color: #fff;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      bottom: 16px;
+      padding: 0px 16px 0px 40px;
+      font-family: Roboto Regular, Helvetica Neue, sans-serif;
+      font-size: 14px;
+      color:#4285f4;
+      height: 36px;
+      line-height: 36px;
+      border-radius: 18px;
+      border: 1px solid #DADCE0;
+    }
+    
+    #ar-button:active {
+      background-color: #E8EAED;
+    }
+    
+    #ar-button:focus {
+      outline: none;
+    }
+    
+    #ar-button:focus-visible {
+      outline: 1px solid #4285f4;
+    }
+    
+    @keyframes circle {
+      from { transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg); }
+      to   { transform: translateX(-50%) rotate(360deg) translateX(50px) rotate(-360deg); }
+    }
+    
+    @keyframes elongate {
+      from { transform: translateX(100px); }
+      to   { transform: translateX(-100px); }
+    }
+    
+    model-viewer > #ar-prompt {
+      position: absolute;
+      left: 50%;
+      bottom: 60px;
+      animation: elongate 2s infinite ease-in-out alternate;
+      display: none;
+    }
+    
+    model-viewer[ar-status="session-started"] > #ar-prompt {
+      display: block;
+    }
+    
+    model-viewer > #ar-prompt > img {
+      animation: circle 4s linear infinite;
+    }
+    
