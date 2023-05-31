@@ -18,68 +18,123 @@
   <script src="jquery-nice-select-1.1.0/js/jquery.nice-select.js"></script>
   <script src="jquery-nice-select-1.1.0/js/fastclick.js"></script>
   <link rel="stylesheet" href="jquery-nice-select-1.1.0/css/nice-select.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 
-
+  <style>
+    body {
+      font-family: "Lato", sans-serif;
+      color: black;
+    }
+  </style>
 </head>
 
 <body>
 
+  <!-- 
+    <img src="images/OPINORD_logo_black_no_text.png" alt="Logo" width ="200px">
+
+    
+    <div class = "card">
+      <h1 style="color: black;">Jester Modular Sofa</h1>
+      <h2 style="color: black;">DKK 6.000</h2>
+      <button class="button">Buy</button>
+    </div>
+
+
+    <div class = "selectdiv">
+        <select id="variantFabric"></select>
+        <select id="variantTable"></select>
+    </div>
 
     <model-viewer id="ChairMaterial" camera-orbit="-139.8deg 77deg 5.109m" field-of-view="22.98deg" camera-controls
       camera-orbit="0deg 70deg auto" min-camera-orbit="auto 70deg auto" max-camera-orbit="auto 70deg auto" disable-pan
       auto-rotate poster="models/Jester2/poster.webp" shadow-intensity="1" src="models/Jester2/Jester.glb" alt="A Couch">
 
-      <div class = "selectdiv">
-        <select id="variant">
-        </select>
-      </div>
+     
  
 
-    </model-viewer>
+    </model-viewer> -->
 
 
+  <img src="images/OPINORD_logo_black_no_text.png" alt="Logo" width="200px">
+  <div class="spacing"></div>
 
-    <script>
-      // $(document).ready(function () {
-      //   $('select').niceSelect();
-      // });
-      const modelViewerVariants = document.querySelector("model-viewer#ChairMaterial");
-      const select = document.querySelector('#variant');
+    <div class="container">
+      <div class="info">
 
-      modelViewerVariants.addEventListener('load', () => {
-        const names = modelViewerVariants.availableVariants;
-        for (const name of names) {
-          const option = document.createElement('option');
-          option.value = name;
-          option.textContent = name;
-     
-          select.appendChild(option);
-         
+        <h1 style="color: black;">Jester Modular Sofa</h1>
+        <h2 style="color: black;" id="price">DKK 6.000</h2>
+        <p style="color: black;"><strong>Meet the Jester Modular Sofa</strong> - where comfort meets innovation. This sofa, available in an
+          array of fabrics, effortlessly adapts to your living space.</p>
+        <p style="color: black;">What sets it apart is its unique, <strong>built-in tray armrest</strong>. Choose between a natural wood or a
+          sleek metal tray to keep your essentials within reach.</p>
+        <p style="color: black;">Experience luxury and convenience with the Jester Modular Sofa. Customize yours today.</p>
+        <hr>
+        <div class="selectdiv">
+          <select id="variantFabric"></select>
+        </div>
+        <hr>
+        <button class="button">Add to cart</button>
+      </div>
+      <model-viewer id="ChairMaterial" camera-orbit="-139.8deg 77deg 5.109m" field-of-view="22.98deg" camera-controls
+        camera-orbit="0deg 70deg auto" min-camera-orbit="auto 70deg auto" max-camera-orbit="auto 70deg auto" disable-pan
+        auto-rotate poster="models/Jester2/poster.webp" shadow-intensity="1" src="models/Jester2/Jester.glb"
+        alt="A Couch">
+      </model-viewer>
+    </div>
+
+  <script>
+    const modelViewerVariants = document.querySelector("model-viewer#ChairMaterial");
+    const priceText = document.querySelector("#price");
+    const select = document.querySelector('#variantFabric');
+
+    modelViewerVariants.addEventListener('load', () => {
+      const names = modelViewerVariants.availableVariants;
+      for (const name of names) {
+        const option = document.createElement('option');
+        option.value = name;
+
+        if (name == "JensenB") {
+          option.dataset.price = "DKK 5000"; // set data-price attribute
+          option.textContent = "Natural Linen";
+        }
+        else if (name == "Love11") {
+          option.dataset.price = "DKK 4500"; // set data-price attribute
+          option.textContent = "Fresh White";
+        }
+        else if (name == "Vogar110") {
+          option.dataset.price = "DKK 6500"; // set data-price attribute
+          option.textContent = "Vintage Merlot";
+        }
+        else if (name == "Vogar123") {
+          option.dataset.price = "DKK 6000"; // set data-price attribute
+          option.textContent = "Emerald Envy";
         }
 
-        select.addEventListener('input', (event) => {
-            console.log('cricket clicked', event);
-            modelViewerVariants.variantName = event.target.value;
-          });
-       
-        // $('select').niceSelect('update');
-          
-   
-       
+        select.appendChild(option);
+      }
+
+      select.addEventListener('input', (event) => {
+        const selectedOption = event.target.options[event.target.selectedIndex]; // get the selected option
+        if (selectedOption.dataset.price) { // check if the data-price attribute is set
+          console.log('price is ' + selectedOption.dataset.price, event);
+          modelViewerVariants.variantName = selectedOption.value;
+          priceText.textContent = selectedOption.dataset.price; // update price text
+        } else {
+          console.log('price is not set for this option', event);
+        }
+      });
     });
 
-    
-
-    
 
 
 
 
-    </script>
+  </script>
 
 
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
-    </script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+  </script>
 </body>
 
 </html>
