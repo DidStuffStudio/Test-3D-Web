@@ -70,6 +70,11 @@
           sleek metal tray to keep your essentials within reach.</p>
         <p style="color: black;">Experience luxury and convenience with the Jester Modular Sofa. Customize yours today.</p>
         <hr>
+
+        <div class="selectdiv">
+          <select id="selectSize"></select>
+        </div>
+
         <div class="selectdiv">
           <select id="variantFabric"></select>
         </div>
@@ -78,15 +83,62 @@
       </div>
       <model-viewer id="ChairMaterial" camera-orbit="-139.8deg 77deg 5.109m" field-of-view="22.98deg" camera-controls
         camera-orbit="0deg 70deg auto" min-camera-orbit="auto 70deg auto" max-camera-orbit="auto 70deg auto" disable-pan
+<<<<<<< Updated upstream
         auto-rotate poster="models/Jester2/poster.webp" shadow-intensity="1" src="3D/Jester.glb"
         alt="Jester Modular Sofa">
+=======
+        auto-rotate poster="models/Jester2/poster.webp" shadow-intensity="1" src="3D/JesterOptomised.glb"exposure="0.6" 
+        alt="A Couch">
+>>>>>>> Stashed changes
       </model-viewer>
     </div>
 
   <script>
+
+
+const pause = () => {
+	const modelViewer = document.querySelector("model-viewer#ChairMaterial");
+  modelViewer.pause();
+}
+
+function PlayAnim(name){
+  const modelviewer = document.querySelector("model-viewer#ChairMaterial");
+  modelviewer.pause();
+  modelviewer.animationName = name
+  modelviewer.currentTime = 0;
+  modelviewer.play({repetitions: 1});
+  modelviewer.addEventListener('finished', modelviewer.pause());
+}
+
+
+
     const modelViewerVariants = document.querySelector("model-viewer#ChairMaterial");
     const priceText = document.querySelector("#price");
     const select = document.querySelector('#variantFabric');
+    const selectSize = document.querySelector('#selectSize');
+
+
+
+
+
+        const narrowOption = document.createElement('option');
+        narrowOption.value = "WideToNarrow";
+        narrowOption.textContent = "Wide Divan";
+   
+        const wideOption = document.createElement('option');
+        wideOption.value = "NarrowToWide";
+        wideOption.textContent = "Stock Divan";
+
+        selectSize.appendChild(wideOption);
+      
+        selectSize.appendChild(narrowOption);
+      
+
+        selectSize.addEventListener('input', (event) => {
+        const selectedOption = event.target.options[event.target.selectedIndex]; // get the selected option
+        PlayAnim(selectedOption.value)
+      });
+
 
     modelViewerVariants.addEventListener('load', () => {
       const names = modelViewerVariants.availableVariants;
@@ -98,9 +150,9 @@
           option.dataset.price = "DKK 5000"; // set data-price attribute
           option.textContent = "Natural Linen";
         }
-        else if (name == "Love11") {
+        else if (name == "Talent") {
           option.dataset.price = "DKK 4500"; // set data-price attribute
-          option.textContent = "Fresh White";
+          option.textContent = "Fresh Look";
         }
         else if (name == "Vogar110") {
           option.dataset.price = "DKK 6500"; // set data-price attribute
