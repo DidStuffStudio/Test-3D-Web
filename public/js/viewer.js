@@ -24,10 +24,10 @@ function loadLocalModel() {
     }
 
     // Define the path to your local GLB model
-    const modelPath = './3D/JesterOptomised.glb';
+    const modelPath = '../3D/JesterOptomised.glb';
 
     // Create a loader for GLB files
-    const glbLoader = new THREE.GLTFLoader(loadingManager);
+    const glbLoader = new GLTFLoader(loadingManager);
 
     // Load the GLB model
     glbLoader.load(modelPath, (gltf) => {
