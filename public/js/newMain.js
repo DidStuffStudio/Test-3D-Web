@@ -6,6 +6,92 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 let camera, scene, renderer, controls;
 
+// // Function to initialize the Three.js viewer
+// function initViewer(container, modelPath) {
+//   // Create scene, camera and renderer
+//   scene = new THREE.Scene();
+//   camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 20);
+//   renderer = new THREE.WebGLRenderer({ antialias: true });
+
+//   renderer.setSize(container.clientWidth, container.clientHeight);
+//   container.appendChild(renderer.domElement);
+
+//   // Create a loader for GLB files
+//   const glbLoader = new GLTFLoader();
+
+//   // Load the GLB model
+//   glbLoader.load(modelPath, (gltf) => {
+//     const model = gltf.scene;
+//     scene.add(model);
+//     camera.position.set(0, 1, 3);
+//     controls = new OrbitControls(camera, renderer.domElement);
+
+//     // Animation Loop
+//     function animate() {
+//       requestAnimationFrame(animate);
+//       renderer.render(scene, camera);
+//     }
+//     animate();
+//   });
+// }
+
+document.addEventListener('DOMContentLoaded', function () {
+  const mainMedia = document.getElementById('mainMedia');
+  const thumbnailItems = document.querySelectorAll('.thumbnail-item');
+  const prevButton = document.getElementById('prevButton');
+  const nextButton = document.getElementById('nextButton');
+
+  const mediaSources = [
+    '../Image/JesterAngleCamera.jpg',
+    '../Image/Jester_Setting.jpg',
+    '../3D/JesterOptomised.glb'
+    // ... (other media paths)
+  ];
+
+  let currentIndex = 0;
+
+  function showMedia(index) {
+    mainMedia.innerHTML = '';
+    const mediaPath = mediaSources[index];
+
+    if (mediaPath.endsWith('.jpg') || mediaPath.endsWith('.png')) {
+      const img = document.createElement('img');
+      img.src = mediaPath;
+      img.alt = 'Image';
+      mainMedia.appendChild(img);
+    } else if (mediaPath.endsWith('.mp4')) {
+      const video = document.createElement('video');
+      video.src = mediaPath;
+      video.controls = true;
+      mainMedia.appendChild(video);
+    } else if (mediaPath.endsWith('.glb')) {
+      initViewer(mainMedia, mediaPath);
+    }
+    currentIndex = index;
+  }
+
+  // Add click event listeners to thumbnails
+  thumbnailItems.forEach((thumbnail, index) => {
+    thumbnail.addEventListener('click', () => {
+      showMedia(index);
+    });
+  });
+
+  // Event listeners for previous and next buttons
+  prevButton.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + mediaSources.length) % mediaSources.length;
+    showMedia(currentIndex);
+  });
+  
+  nextButton.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % mediaSources.length;
+    showMedia(currentIndex);
+  });
+
+  // Initial display of media
+  showMedia(currentIndex);
+});
+
 // Function to initialize the Three.js viewer
 function initViewer(container) {
 
@@ -74,9 +160,6 @@ function initViewer(container) {
   
 }
 
-
-
-// Function to update dimensions on main media container resize
 function onWindowResize() {
     // Get the new width and height of the main media container
     const newW = mainMediaContainer.clientWidth;
@@ -90,4 +173,3 @@ function onWindowResize() {
     renderer.setSize(newW, newH);
   }
 
-  export { initViewer };

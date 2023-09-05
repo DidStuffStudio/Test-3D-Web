@@ -9,7 +9,16 @@
 
 .container {
 
-    position: relative;
+    position: absolute;
+
+}
+
+#viewerContainer {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
 /* Add styles for the product card */
@@ -86,7 +95,7 @@
 }
 
 /* CSS for individual thumbnail items */
-.thumbnail-item {
+.thumbnail-item{
     width: 100px; /* Set the width of the thumbnail */
     height: 75px; /* Set the height of the thumbnail */
     overflow: hidden;
@@ -106,6 +115,8 @@
 .thumbnail-item:hover {
     border-color: #007BFF; /* Highlight the selected thumbnail on hover */
 }
+
+
 
 
 /* Style the product info on the left */

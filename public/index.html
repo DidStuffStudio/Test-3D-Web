@@ -8,8 +8,24 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
 
+	<script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://unpkg.com/three/build/three.module.js",
+				"three/addons/": "https://unpkg.com/three/examples/jsm/"
+			}
+		}
+    </script>
+    <script type="module" src="js/newMain.js"></script>
+
 </head>
 <body>
+ 
+   
+    
     <div class="product-card">
         <div class="product-info">
             <h1 style="color: black;">Jester Modular Sofa</h1>
@@ -35,16 +51,15 @@
         <div class="thumbnails-outer">
         <div class="thumbnails">
             <div class="thumbnail-item">
-                <img src="Image/Jester_Setting.jpg" alt="Image 1">
+                <img src="Image/JesterAngleCamera.jpg" alt="Image 1">
             </div>
             <div class="thumbnail-item">
-                <html src="3D_Viewer.html" alt="Image 2">
+                <img src="Image/Jester_Setting.jpg" alt="Image 2">
             </div>
-            <div class="thumbnail-item">
-                <video src="Video/DumboVideo.mp4" type="video/mp4">
-            </div>
-            <div class="thumbnail-item">
-                <img src="Image/JesterAngleCamera.jpg" alt="Image 2">
+
+            <div class="thumbnail-item" data-media-type="3d" id="3dViewer">
+                <!-- Placeholder for the 3D viewer -->
+                <div id="3DViewerPlaceholder"></div>
             </div>
             <div class="thumbnail-item">
                 <img src="Image/JesterFrontCamera.jpg" alt="Image 2">
@@ -63,6 +78,9 @@
     </div>
     </div>
     </div>
-    <script src="js/main.js"></script>
+    	
+
+  
+ 
 </body>
 </html>
