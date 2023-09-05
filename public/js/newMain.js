@@ -6,34 +6,6 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 let camera, scene, renderer, controls;
 
-// // Function to initialize the Three.js viewer
-// function initViewer(container, modelPath) {
-//   // Create scene, camera and renderer
-//   scene = new THREE.Scene();
-//   camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 20);
-//   renderer = new THREE.WebGLRenderer({ antialias: true });
-
-//   renderer.setSize(container.clientWidth, container.clientHeight);
-//   container.appendChild(renderer.domElement);
-
-//   // Create a loader for GLB files
-//   const glbLoader = new GLTFLoader();
-
-//   // Load the GLB model
-//   glbLoader.load(modelPath, (gltf) => {
-//     const model = gltf.scene;
-//     scene.add(model);
-//     camera.position.set(0, 1, 3);
-//     controls = new OrbitControls(camera, renderer.domElement);
-
-//     // Animation Loop
-//     function animate() {
-//       requestAnimationFrame(animate);
-//       renderer.render(scene, camera);
-//     }
-//     animate();
-//   });
-// }
 
 document.addEventListener('DOMContentLoaded', function () {
   const mainMedia = document.getElementById('mainMedia');
@@ -44,7 +16,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const mediaSources = [
     '../Image/JesterAngleCamera.jpg',
     '../Image/Jester_Setting.jpg',
-    '../3D/JesterOptomised.glb'
+    '../3D/JesterWood.glb',
+    '../Video/Apartment.mp4',
+    '../Video/DumboVideo.mp4',
+    '../Image/Vogar_1_Swirl.png',
+    '../Image/JesterFrontCamera.jpg',
+    '../Image/JesterSideCamera.jpg',
+    '../Image/JesterBackCamera.jpg',
+    '../Image/SF215166_GND.png',
+    '../Image/SF215172_GND.png'
     // ... (other media paths)
   ];
 
@@ -98,7 +78,7 @@ function initViewer(container) {
     console.log("This is a line of text.");
 
   // Define the path to your local GLB model
-  const modelPath = '../3D/JesterOptomised.glb'; // Adjust the path accordingly
+  const modelPath = '../3D/JesterWood.glb'; // Adjust the path accordingly
 
   // Create a loader for GLB files
   const glbLoader = new GLTFLoader();
@@ -106,7 +86,7 @@ function initViewer(container) {
   // Create a scene and camera
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 20);
-  camera.position.set(-0.75, 0.7, 1.25);
+  // camera.position.set(-0.75, 0.7, 1.25);
 
   // Create a renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -125,7 +105,7 @@ function initViewer(container) {
     });
     scene.add(model);
     // Adjust camera position and controls (you may need to customize this)
-  camera.position.set(0, 1, 3);
+  camera.position.set(0, 1, 5);
   const environment = new RoomEnvironment(renderer);
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
 
@@ -136,7 +116,6 @@ function initViewer(container) {
   controls.enableDamping = true;
   controls.minDistance = 0.7;
   controls.maxDistance = 10;
-  controls.target.set(0, 0.35, 0);
   controls.update();
 
   // Restrict camera panning

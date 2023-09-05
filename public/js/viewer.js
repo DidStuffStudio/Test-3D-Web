@@ -9,10 +9,9 @@ let camera, scene, renderer, controls;
 // Function to initialize the Three.js viewer
 function initViewer(container) {
 
-    console.log("This is a line of text.");
 
   // Define the path to your local GLB model
-  const modelPath = '../3D/JesterOptomised.glb'; // Adjust the path accordingly
+  const modelPath = '../3D/JesterWood.glb'; // Adjust the path accordingly
 
   // Create a loader for GLB files
   const glbLoader = new GLTFLoader();
@@ -20,7 +19,7 @@ function initViewer(container) {
   // Create a scene and camera
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 20);
-  camera.position.set(-0.75, 0.7, 1.25);
+  // camera.position.set(-1.5, 5, 2);
 
   // Create a renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -39,7 +38,7 @@ function initViewer(container) {
     });
     scene.add(model);
     // Adjust camera position and controls (you may need to customize this)
-  camera.position.set(0, 1, 3);
+  // camera.position.set(0, 1, 3);
   const environment = new RoomEnvironment(renderer);
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
 
@@ -50,7 +49,7 @@ function initViewer(container) {
   controls.enableDamping = true;
   controls.minDistance = 0.7;
   controls.maxDistance = 10;
-  controls.target.set(0, 0.35, 0);
+  controls.target.set(0, 0, 0);
   controls.update();
 
   // Restrict camera panning
@@ -66,8 +65,6 @@ function initViewer(container) {
   function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-    console.log("Successfully loaded");
-
   }
   });
 
