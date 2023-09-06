@@ -7,10 +7,21 @@
     color: red;
 }
 
+h1, h2 {
+    color: black;
+    margin-bottom: 5vh; /* Changed to viewport height */
+}
+
+p {
+    color: black;
+    margin-top: 5vh;  /* Changed to viewport height */
+    margin-bottom: 5vh;  /* Changed to viewport height */
+}
+
 .container {
-
     position: absolute;
-
+    width: 100%;
+    height: 100%;
 }
 
 #viewerContainer {
@@ -21,83 +32,68 @@
     overflow: hidden;
 }
 
-/* Add styles for the product card */
 .product-card {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Align items to the top */
-    max-width: 100%;
-    margin: 100px 100px;
-    padding: 20px;
-    padding-left: 50px;
-    padding-right: 50px;
+    align-items: flex-start;
+    width: auto;/*calc(100% - 2vh); /* Changed to percentage and viewport height */
+    margin: 2vh;  /* Changed to viewport height */
+    padding: 1vh 1vh;  /* Changed to viewport height */
     background-color: #eee;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
 }
 
-
-/* Style the gallery on the right */
 .gallery {
     flex: 1;
 }
 
-
-
-/* Add styles for the main image and thumbnails */
 .main-image {
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 1vh;  /* Changed to viewport height */
 }
 
-.main-media img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* This property scales the content to cover the entire container */
-}
-.main-media video {
+.main-media img, .main-media video {
     width: 100%;
     height: auto;
+    object-fit: cover;
 }
 
 .gallery-container {
-    position: relative; /* Add this line to establish a positioning context */
+    position: relative;
     display: flex;
-    flex-direction: column; /* Stack main media and thumbnails vertically */
-    align-items: center; /* Align items to the left */
+    flex-direction: column;
+    align-items: center;
 }
-/* CSS for the main image or video */
+
 .main-media {
-    width: 800px; /* Set the width to your desired fixed size */
-    height: 600px; /* Set the height to your desired fixed size */
+    width: 50vw; /* Changed to viewport width */
+    height: 37.5vw; /* Changed to viewport width */
     border: 1px solid #ccc;
     border-radius: 5px;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 1vh;
     position: relative;
 }
 
-/* CSS for the thumbnails outer container with scrolling */
 .thumbnails-outer {
-    width: 800px; /* Set the width to match the main media container */
-    overflow-x: auto; /* Enable horizontal scrolling */
-    white-space: nowrap; /* Prevent thumbnails from wrapping to the next line */
-    padding-bottom: 10px; /* Add some padding to separate thumbnails from main media */
+    width: 50vw; /* Changed to viewport width */
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 1vh;  /* Changed to viewport height */
 }
 
-/* CSS for the thumbnails container */
 .thumbnails {
-    display: inline-flex; /* Display thumbnails in a row */
-    gap: 10px;
+    display: inline-flex;
+    gap: 1vh;  /* Changed to viewport height */
 }
 
-/* CSS for individual thumbnail items */
-.thumbnail-item{
-    width: 100px; /* Set the width of the thumbnail */
-    height: 75px; /* Set the height of the thumbnail */
+.thumbnail-item {
+    width: 6.25vw; /* Changed to viewport width */
+    height: 4.6875vw; /* Changed to viewport width */
     overflow: hidden;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -105,31 +101,23 @@
     transition: border-color 0.2s ease-in-out;
 }
 
-/* CSS for thumbnail images to fit the thumbnail item dimensions */
 .thumbnail-item img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Zoom to fit while maintaining aspect ratio */
+    object-fit: cover;
 }
 
 .thumbnail-item:hover {
-    border-color: #007BFF; /* Highlight the selected thumbnail on hover */
+    border-color: #007BFF;
 }
 
-
-
-
-/* Style the product info on the left */
 .product-info {
     flex: 1;
-    padding: 10px;
-    padding-right: 100px;
-    align-items: flex-start; /* Align content to the top */
+    padding: 1vh 5vw; /* Changed to viewport height and viewport width */
 }
 
 .product-info h2 {
-    font-size: 24px;
-    margin: 0;
+    font-size: 1.5vw; /* Changed to viewport width */
 }
 
 
@@ -149,7 +137,7 @@
   font-weight: 500;
   line-height: 20px;
   list-style: none;
-  padding: 6px 16px;
+  padding: 20px 50px;
   position: relative;
   transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
   user-select: none;
