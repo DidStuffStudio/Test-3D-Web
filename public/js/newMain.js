@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const mediaSources = [
     '../Image/JesterAngleCamera.jpg',
     '../Image/Jester_Setting.jpg',
-    '../3D/JesterWood.glb',
+    '../html/360_Viewer.html',
     '../Video/Apartment.mp4',
     '../Video/DumboVideo.mp4',
     '../Image/Vogar_1_Swirl.png',
@@ -24,8 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
     '../Image/JesterSideCamera.jpg',
     '../Image/JesterBackCamera.jpg',
     '../Image/SF215166_GND.png',
-    '../Image/SF215172_GND.png'
-    // ... (other media paths)
+    '../Image/SF215172_GND.png',
+    '../3D/JesterWood.glb'
+
   ];
 
   let currentIndex = 0;
@@ -44,7 +45,19 @@ document.addEventListener('DOMContentLoaded', function () {
       video.src = mediaPath;
       video.controls = true;
       mainMedia.appendChild(video);
-    } else if (mediaPath.endsWith('.glb')) {
+    }
+    else if (mediaPath.endsWith('.html')){
+      fetch(mediaPath)
+        .then(response => response.text())
+        .then(data => {
+          mainMedia.innerHTML = data;
+          initialize360Viewer();
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+     else if (mediaPath.endsWith('.glb')) {
       initViewer(mainMedia, mediaPath);
     }
     currentIndex = index;
@@ -71,6 +84,116 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initial display of media
   showMedia(currentIndex);
 });
+
+
+
+function initialize360Viewer(){
+  const img = document.getElementById('rotatingImage');
+let isDragging = false;
+let isZoomed = false;
+let startIndex = 0;
+let threshold = 30;
+let accumulatedMovement = 0;
+let velocity = 0;
+let velocityMagnitude = 1;
+let friction = 0.9;
+let offsetX = 0; 
+let offsetY = 0;
+
+
+
+img.addEventListener('mousedown', function () {
+    isDragging = true;
+    accumulatedMovement = 0;
+});
+
+document.addEventListener('mouseup', function () {
+    isDragging = false;
+});
+
+img.addEventListener('mousemove', function (event) {
+    if (isDragging) {
+        if (isZoomed) {
+            // If zoomed in, adjust the image's position in both x and y directions
+            const containerRect = img.parentElement.getBoundingClientRect();
+            const imgRect = img.getBoundingClientRect();
+
+            offsetX = Math.min(Math.max(offsetX + event.movementX, containerRect.width - imgRect.width), 0);
+            offsetY = Math.min(Math.max(offsetY + event.movementY, containerRect.height - imgRect.height), 0);
+
+            img.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        } else {
+            // If zoomed out, rotate the image as before
+            accumulatedMovement += event.movementX;
+            velocity = +event.movementX * velocityMagnitude;
+            updateRotation();
+        }
+    }
+});
+
+function getFormattedIndex(index) {
+    return String(index).padStart(4, '0');
+}
+
+function updateRotation() {
+    while (Math.abs(accumulatedMovement) >= threshold) {
+        startIndex += Math.sign(accumulatedMovement);
+        accumulatedMovement -= threshold * Math.sign(accumulatedMovement);
+
+        if (startIndex > 35) startIndex = 0;
+        if (startIndex < 0) startIndex = 35;
+
+        let formattedIndex = getFormattedIndex(startIndex);  // Get the formatted index
+        img.src = `../Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
+    }
+}
+
+img.addEventListener('dblclick', function () {
+    let formattedIndex = getFormattedIndex(startIndex);  // Get the formatted index
+    if (isZoomed) {
+        // If currently zoomed in, zoom out and reset transformations
+        img.style.transform = '';
+        img.style.objectFit = '';
+        img.style.width = ''; // Reset to original width
+        img.style.height = ''; // Reset to original height
+        isZoomed = false;
+        offsetX = 0;
+        offsetY = 0;
+
+        // Switch back to the appropriate low-resolution image
+        img.src = `../Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
+    } else {
+        // If currently zoomed out, zoom in
+        img.style.objectFit = 'none';
+        img.style.width = '200%'; // Set to desired zoom level
+        img.style.height = '200%'; // Set to desired zoom level
+        isZoomed = true;
+
+        // Switch to the high-resolution image
+        img.src = `../Image/360/4k/Jester.Main Camera.${formattedIndex}.png`;
+    }
+});
+
+
+function updateImage() {
+    if (!isZoomed && Math.abs(velocity) > 0.15) {
+        velocity *= Math.pow(friction, velocityMagnitude);
+        accumulatedMovement += velocity;
+        updateRotation();
+    }
+}
+
+
+function animate() {
+    if (!isDragging) {
+        updateImage();
+    }
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+}
 
 // Function to initialize the Three.js viewer
 function initViewer(container) {

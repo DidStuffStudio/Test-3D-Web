@@ -189,7 +189,7 @@ p {
     padding: 10px;
     border: none;
     cursor: pointer;
-    z-index: 2;
+    z-index: 1001;
     border-radius: 50%; /* Make the button round */
     width: 40px; /* Set the button width */
     height: 40px; /* Set the button height */
@@ -229,3 +229,6 @@ p {
     top: 50%;
     transform: translateY(-50%);
 }
+
+
+
