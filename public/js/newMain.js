@@ -14,18 +14,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const nextButton = document.getElementById('nextButton');
 
   const mediaSources = [
-    '../Image/JesterAngleCamera.jpg',
-    '../Image/Jester_Setting.jpg',
-    '../html/360_Viewer.html',
-    '../Video/Apartment.mp4',
-    '../Video/DumboVideo.mp4',
-    '../Image/Vogar_1_Swirl.png',
-    '../Image/JesterFrontCamera.jpg',
-    '../Image/JesterSideCamera.jpg',
-    '../Image/JesterBackCamera.jpg',
-    '../Image/SF215166_GND.png',
-    '../Image/SF215172_GND.png',
-    '../3D/JesterWood.glb'
+    'Image/JesterAngleCamera.jpg',
+    'Image/Jester_Setting.jpg',
+    'html/360_Viewer.html',
+    'Video/Apartment.mp4',
+    'Video/DumboVideo.mp4',
+    'Image/Vogar_1_Swirl.png',
+    'Image/JesterFrontCamera.jpg',
+    'Image/JesterSideCamera.jpg',
+    'Image/JesterBackCamera.jpg',
+    'Image/SF215166_GND.png',
+    'Image/SF215172_GND.png',
+    '3D/JesterWood.glb'
 
   ];
 
@@ -86,6 +86,23 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+let formattedIndex
+
+function getFormattedIndex(index) {
+  return String(index).padStart(4, '0');
+}
+
+function preload360Images() {
+  var loadedImages = [];
+  for (var i = 0; i < 35; i++) {
+      let formattedIndex = getFormattedIndex(i);  // Get the formatted index
+      var img = new Image();
+      img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
+      loadedImages.push(img);
+  }
+}
+
+
 
 function initialize360Viewer(){
   const img = document.getElementById('rotatingImage');
@@ -100,7 +117,7 @@ let friction = 0.9;
 let offsetX = 0; 
 let offsetY = 0;
 
-
+preload360Images();
 
 img.addEventListener('mousedown', function () {
     isDragging = true;
@@ -131,9 +148,6 @@ img.addEventListener('mousemove', function (event) {
     }
 });
 
-function getFormattedIndex(index) {
-    return String(index).padStart(4, '0');
-}
 
 function updateRotation() {
     while (Math.abs(accumulatedMovement) >= threshold) {
@@ -144,7 +158,7 @@ function updateRotation() {
         if (startIndex < 0) startIndex = 35;
 
         let formattedIndex = getFormattedIndex(startIndex);  // Get the formatted index
-        img.src = `../Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
+        img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
     }
 }
 
@@ -161,7 +175,7 @@ img.addEventListener('dblclick', function () {
         offsetY = 0;
 
         // Switch back to the appropriate low-resolution image
-        img.src = `../Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
+        img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
     } else {
         // If currently zoomed out, zoom in
         img.style.objectFit = 'none';
@@ -170,7 +184,7 @@ img.addEventListener('dblclick', function () {
         isZoomed = true;
 
         // Switch to the high-resolution image
-        img.src = `../Image/360/4k/Jester.Main Camera.${formattedIndex}.png`;
+        img.src = `Image/360/4k/Jester.Main Camera.${formattedIndex}.png`;
     }
 });
 
@@ -201,7 +215,7 @@ function initViewer(container) {
     console.log("This is a line of text.");
 
   // Define the path to your local GLB model
-  const modelPath = '../3D/JesterWood.glb'; // Adjust the path accordingly
+  const modelPath = '3D/JesterWood.glb'; // Adjust the path accordingly
 
   // Create a loader for GLB files
   const glbLoader = new GLTFLoader();
