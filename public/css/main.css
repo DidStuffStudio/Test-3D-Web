@@ -67,11 +67,22 @@ p {
 }
 
 .main-media {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+}
+
+.main-media-container
+{
     width: 50vw; /* Changed to viewport width */
     height: 37.5vw; /* Changed to viewport width */
     border: 1px solid #ccc;
     border-radius: 5px;
-    overflow: hidden;
+    
     display: flex;
     justify-content: center;
     align-items: center;
@@ -182,44 +193,49 @@ p {
 /* CSS for the navigation buttons */
 .nav-button {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     padding: 10px;
     border: none;
     cursor: pointer;
     z-index: 1001;
-    border-radius: 50%; /* Make the button round */
+    border-radius: 10px; /* Adjust the button's roundness */
     width: 40px; /* Set the button width */
-    height: 40px; /* Set the button height */
+    height: 50%; /* Set the button height relative to its parent */
+    transition: transform 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 
 /* CSS for navigation buttons */
 .prev-button {
-    left: 10px; /* Adjust the left button position */
+    left: 2px; /* Adjust the left button position */
 }
 
 .next-button {
-    right: 10px; /* Adjust the right button position */
+    right: 2px; /* Adjust the right button position */
 }
-
+/* 
 .prev-button::before,
 .next-button::before {
-    content: ''; /* Add content to the pseudo-element */
+    content: ''; 
     display: block;
     width: 0;
     height: 0;
     border-style: solid;
     position: absolute;
-}
+    left: 50%;
+  
+} */
 
-.prev-button::before {
+/* .prev-button::before {
     border-width: 10px 12px 10px 0;
     border-color: transparent rgba(255, 255, 255, 0.9) transparent transparent;
     left: 10px;
     top: 50%;
-    transform: translateY(-50%);
+    
 }
 
 .next-button::before {
@@ -227,8 +243,54 @@ p {
     border-color: transparent transparent transparent rgba(255, 255, 255, 0.9);
     right: 10px;
     top: 50%;
-    transform: translateY(-50%);
+    
+} */
+
+.nav-button:hover {
+    transform: scale(1.05); /* Slightly lift and scale the button on hover */
+}
+
+.arrow {
+    width: 80%; /* This will make the image fill the entire width of the button */
+    height: 80%; /* This will make the image fill the entire height of the button */
+    object-fit: contain; /* This will maintain the aspect ratio of the image */
+}
+
+/* Rotating the arrow inside the prevButton counter-clockwise */
+.prev-button .arrow {
+    transform: rotate(90deg); /* Rotating counter-clockwise */
+}
+
+/* Rotating the arrow inside the nextButton clockwise */
+#nextButton .arrow {
+    transform: rotate(-90deg); /* Rotate counter-clockwise */
 }
 
 
 
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #000;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

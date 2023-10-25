@@ -5,69 +5,40 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 
 let camera, scene, renderer, controls;
+let loadingScreen, mainMedia;
+
+let mediaSources = [
+  'Image/JesterAngleCamera.jpg',
+  'Image/Jester_Setting.jpg',
+  'html/360_Viewer.html',
+  'Video/Apartment.mp4',
+  'Video/DumboVideo.mp4',
+  'Image/Vogar_1_Swirl.png',
+  'Image/JesterFrontCamera.jpg',
+  'Image/JesterSideCamera.jpg',
+  'Image/JesterBackCamera.jpg',
+  'Image/SF215166_GND.png',
+  'Image/SF215172_GND.png',
+  '3D/JesterWood.glb'
+];
+
+let currentIndex = 0;
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  const mainMedia = document.getElementById('mainMedia');
+  mainMedia = document.getElementById('mainMedia');
   const thumbnailItems = document.querySelectorAll('.thumbnail-item');
   const prevButton = document.getElementById('prevButton');
   const nextButton = document.getElementById('nextButton');
+  loadingScreen = document.getElementById('loadingOverlay');
 
-  const mediaSources = [
-    'Image/JesterAngleCamera.jpg',
-    'Image/Jester_Setting.jpg',
-    'html/360_Viewer.html',
-    'Video/Apartment.mp4',
-    'Video/DumboVideo.mp4',
-    'Image/Vogar_1_Swirl.png',
-    'Image/JesterFrontCamera.jpg',
-    'Image/JesterSideCamera.jpg',
-    'Image/JesterBackCamera.jpg',
-    'Image/SF215166_GND.png',
-    'Image/SF215172_GND.png',
-    '3D/JesterWood.glb'
-
-  ];
-
-  let currentIndex = 0;
-
-  function showMedia(index) {
-    mainMedia.innerHTML = '';
-    const mediaPath = mediaSources[index];
-
-    if (mediaPath.endsWith('.jpg') || mediaPath.endsWith('.png')) {
-      const img = document.createElement('img');
-      img.src = mediaPath;
-      img.alt = 'Image';
-      mainMedia.appendChild(img);
-    } else if (mediaPath.endsWith('.mp4')) {
-      const video = document.createElement('video');
-      video.src = mediaPath;
-      video.controls = true;
-      mainMedia.appendChild(video);
-    }
-    else if (mediaPath.endsWith('.html')){
-      fetch(mediaPath)
-        .then(response => response.text())
-        .then(data => {
-          mainMedia.innerHTML = data;
-          initialize360Viewer();
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    }
-     else if (mediaPath.endsWith('.glb')) {
-      initViewer(mainMedia, mediaPath);
-    }
-    currentIndex = index;
-  }
 
   // Add click event listeners to thumbnails
   thumbnailItems.forEach((thumbnail, index) => {
     thumbnail.addEventListener('click', () => {
       showMedia(index);
     });
+
   });
 
   // Event listeners for previous and next buttons
@@ -86,26 +57,135 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-let formattedIndex
+
+function showMedia(index) {
+    
+  mainMedia.innerHTML = '';
+  
+  const mediaPath = mediaSources[index];
+
+  //Image
+  if (mediaPath.endsWith('.jpg') || mediaPath.endsWith('.png')) {
+
+    showLoading();
+
+    const img = document.createElement('img');
+    img.src = mediaPath;
+    img.alt = 'Image';
+    img.style.filter = "blur(10px)";
+    img.onload = imageLoaded(img);
+  } 
+  
+  //Video
+  else if (mediaPath.endsWith('.mp4')) {
+    
+    const video = document.createElement('video');
+    video.src = mediaPath;
+    video.controls = true;
+    mainMedia.appendChild(video);
+  }
+
+  // 360 Viewer or HTML
+  else if (mediaPath.endsWith('.html')){
+
+    showLoading();
+
+    fetch(mediaPath)
+      .then(response => response.text())
+      .then(data => {
+        preload360Images(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+  //3D THREE.js viewer
+   else if (mediaPath.endsWith('.glb')) {
+    initViewer(mainMedia, mediaPath);
+  }
+  currentIndex = index;
+}
+
 
 function getFormattedIndex(index) {
   return String(index).padStart(4, '0');
 }
 
-function preload360Images() {
-  var loadedImages = [];
-  for (var i = 0; i < 35; i++) {
-      let formattedIndex = getFormattedIndex(i);  // Get the formatted index
-      var img = new Image();
-      img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
-      loadedImages.push(img);
-  }
+function showLoading(){
+  loadingScreen.style.display = 'flex';
+  loadingScreen.style.zIndex = 200;
+  mainMedia.appendChild(loadingScreen);
+}
+
+function hideLoading(){
+  loadingScreen.style.display = 'none';
+  loadingScreen.style.zIndex = -50;
+}
+
+
+function imageLoaded(img) {
+  mainMedia.appendChild(img);
+
+
+  img.style.filter = 'blur(0px)';
+  hideLoading();
+
+  // For testing
+  // setTimeout(function(){
+  //   img.style.filter = 'blur(0px)';
+  //   hideLoading();
+  // }, 1000)
+    
 }
 
 
 
-function initialize360Viewer(){
-  const img = document.getElementById('rotatingImage');
+function preload360Images(data) {
+  
+  var totalImages = 35;
+  var loadedCount = 0; // Counter to track the number of loaded images
+
+  const placeholderImg = document.createElement('img');
+  placeholderImg.src = "Image/360/2k/Jester.Main Camera.0000.png";
+  placeholderImg.alt = 'Image';
+  placeholderImg.style.filter = "blur(10px)";
+  mainMedia.appendChild(placeholderImg);
+
+  function imageLoaded() {
+    loadedCount++; // Increment the counter each time an image loads
+    if (loadedCount === totalImages) { // Check if all images have loaded
+      htmlLoaded(data); // If so, call htmlLoaded(data)
+    }
+  }
+
+  for (var i = 0; i < totalImages; i++) {
+    let formattedIndex = getFormattedIndex(i);
+    var img = new Image();
+    img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
+    img.onload = imageLoaded; // Set imageLoaded as the onload event handler
+  }    
+}
+
+
+function htmlLoaded(data) {
+  console.log("html loaded");
+  
+  setTimeout(function(){
+    mainMedia.innerHTML = '';
+    mainMedia.innerHTML = data;
+    hideLoading();
+    initialize360Viewer(data);
+  }, 1000)
+  
+}
+
+
+
+function initialize360Viewer(data){
+
+
+const img = document.getElementById('rotatingImage');
 let isDragging = false;
 let isZoomed = false;
 let startIndex = 0;
@@ -117,7 +197,7 @@ let friction = 0.9;
 let offsetX = 0; 
 let offsetY = 0;
 
-preload360Images();
+
 
 img.addEventListener('mousedown', function () {
     isDragging = true;
@@ -209,15 +289,13 @@ animate();
 
 }
 
-// Function to initialize the Three.js viewer
+
 function initViewer(container) {
 
-    console.log("This is a line of text.");
-
-  // Define the path to your local GLB model
+  // Define the path
   const modelPath = '3D/JesterWood.glb'; // Adjust the path accordingly
 
-  // Create a loader for GLB files
+  // Create a loader
   const glbLoader = new GLTFLoader();
 
   // Create a scene and camera
@@ -236,12 +314,12 @@ function initViewer(container) {
     // Traverse through all meshes in the model and apply the material
     model.traverse((node) => {
       if (node.isMesh) {
-        // Replace with your desired material
+        // Replace material
         //node.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
       }
     });
     scene.add(model);
-    // Adjust camera position and controls (you may need to customize this)
+    // Adjust camera position and controls
   camera.position.set(0, 1, 5);
   const environment = new RoomEnvironment(renderer);
   const pmremGenerator = new THREE.PMREMGenerator(renderer);

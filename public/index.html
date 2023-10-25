@@ -42,11 +42,24 @@
       <button class="button">Add to cart</button>
         </div>
     <div class="gallery-container">
-        <div class="main-media" id="mainMedia" draggable="false">
-            
+        <div class="main-media-container">
+            <button id="prevButton" class="nav-button prev-button">
+                <img src="Image/icon/Arrow_white/arrow-30.png" alt="Image 1" class="arrow">
+            </button>
+            <button id="nextButton" class="nav-button next-button">
+                <img src="Image/icon/Arrow_white/arrow-30.png" alt="Image 1" class="arrow">
+            </button>
+            <div class="main-media" id="mainMedia" draggable="false">
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="spinner"></div>
+                    <p>Loading...</p>
+                </div>
+            </div>
+
         </div>
-        <button id="prevButton" class="nav-button prev-button"></button>
-        <button id="nextButton" class="nav-button next-button"></button>
+        
+        <!-- <button id="prevButton" class="nav-button prev-button"></button>
+        <button id="nextButton" class="nav-button next-button"></button> -->
         <div class="thumbnails-outer">
         <div class="thumbnails">
             <div class="thumbnail-item">
@@ -95,7 +108,7 @@
     </div>
     	
 
-    <script type="module" src="js/newMain.js"></script>
+    <script type="module" src="js/gallery.js"></script>
  
 </body>
 </html>
