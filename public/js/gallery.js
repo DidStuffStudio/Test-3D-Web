@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     currentIndex = (currentIndex - 1 + mediaSources.length) % mediaSources.length;
     showMedia(currentIndex);
   });
-  
+
   nextButton.addEventListener('click', () => {
     currentIndex = (currentIndex + 1) % mediaSources.length;
     showMedia(currentIndex);
@@ -59,36 +59,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function showMedia(index) {
-    
-  mainMedia.innerHTML = '';
-  
-  const mediaPath = mediaSources[index];
 
+  mainMedia.innerHTML = '';
+
+  const mediaPath = mediaSources[index];
+  showLoading();
   //Image
   if (mediaPath.endsWith('.jpg') || mediaPath.endsWith('.png')) {
 
-    showLoading();
+    
 
     const img = document.createElement('img');
     img.src = mediaPath;
     img.alt = 'Image';
     img.style.filter = "blur(10px)";
     img.onload = imageLoaded(img);
-  } 
-  
+  }
+
   //Video
   else if (mediaPath.endsWith('.mp4')) {
-    
+
     const video = document.createElement('video');
     video.src = mediaPath;
     video.controls = true;
     mainMedia.appendChild(video);
+    video.onload = hideLoading();
   }
 
   // 360 Viewer or HTML
-  else if (mediaPath.endsWith('.html')){
-
-    showLoading();
+  else if (mediaPath.endsWith('.html')) {
 
     fetch(mediaPath)
       .then(response => response.text())
@@ -101,7 +100,7 @@ function showMedia(index) {
   }
 
   //3D THREE.js viewer
-   else if (mediaPath.endsWith('.glb')) {
+  else if (mediaPath.endsWith('.glb')) {
     initViewer(mainMedia, mediaPath);
   }
   currentIndex = index;
@@ -112,13 +111,13 @@ function getFormattedIndex(index) {
   return String(index).padStart(4, '0');
 }
 
-function showLoading(){
+function showLoading() {
   loadingScreen.style.display = 'flex';
-  loadingScreen.style.zIndex = 200;
+  loadingScreen.style.zIndex = 10000;
   mainMedia.appendChild(loadingScreen);
 }
 
-function hideLoading(){
+function hideLoading() {
   loadingScreen.style.display = 'none';
   loadingScreen.style.zIndex = -50;
 }
@@ -136,13 +135,13 @@ function imageLoaded(img) {
   //   img.style.filter = 'blur(0px)';
   //   hideLoading();
   // }, 1000)
-    
+
 }
 
 
 
 function preload360Images(data) {
-  
+
   var totalImages = 35;
   var loadedCount = 0; // Counter to track the number of loaded images
 
@@ -164,128 +163,150 @@ function preload360Images(data) {
     var img = new Image();
     img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
     img.onload = imageLoaded; // Set imageLoaded as the onload event handler
-  }    
+  }
 }
 
 
 function htmlLoaded(data) {
   console.log("html loaded");
-  
-  setTimeout(function(){
-    mainMedia.innerHTML = '';
-    mainMedia.innerHTML = data;
-    hideLoading();
-    initialize360Viewer(data);
-  }, 1000)
-  
+  mainMedia.innerHTML = data;
+  hideLoading();
+  initialize360Viewer(data);
+
+
+  // setTimeout(function () {
+  //   mainMedia.innerHTML = '';
+  //   mainMedia.innerHTML = data;
+  //   hideLoading();
+  //   initialize360Viewer(data);
+  // }, 1000)
+
 }
 
 
 
-function initialize360Viewer(data){
+function initialize360Viewer(data) {
 
 
-const img = document.getElementById('rotatingImage');
-let isDragging = false;
-let isZoomed = false;
-let startIndex = 0;
-let threshold = 30;
-let accumulatedMovement = 0;
-let velocity = 0;
-let velocityMagnitude = 1;
-let friction = 0.9;
-let offsetX = 0; 
-let offsetY = 0;
+  const img = document.getElementById('rotatingImage');
+  let isDragging = false;
+  let isZoomed = false;
+  let startIndex = 0;
+  let threshold = 30;
+  let accumulatedMovement = 0;
+  let velocity = 0;
+  let velocityMagnitude = 1;
+  let friction = 0.9;
+  let offsetX = 0;
+  let offsetY = 0;
 
 
 
-img.addEventListener('mousedown', function () {
+  img.addEventListener('mousedown', function () {
     isDragging = true;
     accumulatedMovement = 0;
-});
+  });
 
-document.addEventListener('mouseup', function () {
+  document.addEventListener('mouseup', function () {
     isDragging = false;
-});
+  });
 
-img.addEventListener('mousemove', function (event) {
+  img.addEventListener('mousemove', function (event) {
     if (isDragging) {
-        if (isZoomed) {
-            // If zoomed in, adjust the image's position in both x and y directions
-            const containerRect = img.parentElement.getBoundingClientRect();
-            const imgRect = img.getBoundingClientRect();
+      if (isZoomed) {
+        // If zoomed in, adjust the image's position in both x and y directions
+        const containerRect = img.parentElement.getBoundingClientRect();
+        const imgRect = img.getBoundingClientRect();
 
-            offsetX = Math.min(Math.max(offsetX + event.movementX, containerRect.width - imgRect.width), 0);
-            offsetY = Math.min(Math.max(offsetY + event.movementY, containerRect.height - imgRect.height), 0);
+        offsetX = Math.min(Math.max(offsetX + event.movementX, containerRect.width - imgRect.width), 0);
+        offsetY = Math.min(Math.max(offsetY + event.movementY, containerRect.height - imgRect.height), 0);
 
-            img.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-        } else {
-            // If zoomed out, rotate the image as before
-            accumulatedMovement += event.movementX;
-            velocity = +event.movementX * velocityMagnitude;
-            updateRotation();
-        }
+        img.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      } else {
+        // If zoomed out, rotate the image as before
+        accumulatedMovement += event.movementX;
+        velocity = +event.movementX * velocityMagnitude;
+        updateRotation();
+      }
     }
-});
+  });
 
 
-function updateRotation() {
+  function updateRotation() {
     while (Math.abs(accumulatedMovement) >= threshold) {
-        startIndex += Math.sign(accumulatedMovement);
-        accumulatedMovement -= threshold * Math.sign(accumulatedMovement);
+      startIndex += Math.sign(accumulatedMovement);
+      accumulatedMovement -= threshold * Math.sign(accumulatedMovement);
 
-        if (startIndex > 35) startIndex = 0;
-        if (startIndex < 0) startIndex = 35;
+      if (startIndex > 35) startIndex = 0;
+      if (startIndex < 0) startIndex = 35;
 
-        let formattedIndex = getFormattedIndex(startIndex);  // Get the formatted index
-        img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
+      let formattedIndex = getFormattedIndex(startIndex);  // Get the formatted index
+      img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
     }
-}
+  }
 
-img.addEventListener('dblclick', function () {
+  img.addEventListener('dblclick', function () {
     let formattedIndex = getFormattedIndex(startIndex);  // Get the formatted index
     if (isZoomed) {
-        // If currently zoomed in, zoom out and reset transformations
-        img.style.transform = '';
-        img.style.objectFit = '';
-        img.style.width = ''; // Reset to original width
-        img.style.height = ''; // Reset to original height
-        isZoomed = false;
-        offsetX = 0;
-        offsetY = 0;
+      // If currently zoomed in, zoom out and reset transformations
+      img.style.transform = '';
+      img.style.objectFit = '';
+      img.style.width = ''; // Reset to original width
+      img.style.height = ''; // Reset to original height
+      isZoomed = false;
+      offsetX = 0;
+      offsetY = 0;
 
-        // Switch back to the appropriate low-resolution image
-        img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
+
+      // Switch back to the appropriate low-resolution image
+      img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
     } else {
-        // If currently zoomed out, zoom in
+      showLoading();
+      // If currently zoomed out, zoom in
+
+
+      // For testing
+      setTimeout(function () {
         img.style.objectFit = 'none';
         img.style.width = '200%'; // Set to desired zoom level
         img.style.height = '200%'; // Set to desired zoom level
         isZoomed = true;
-
-        // Switch to the high-resolution image
+        img.onload = function () {
+          hideLoading();
+        }
         img.src = `Image/360/4k/Jester.Main Camera.${formattedIndex}.png`;
+      }
+        , 1000)
+      // img.style.objectFit = 'none';
+      // img.style.width = '200%'; // Set to desired zoom level
+      // img.style.height = '200%'; // Set to desired zoom level
+      // isZoomed = true;
+      // img.onload = function() {
+      // hideLoading();
+      //}
+      // Switch to the high-resolution image
+      //img.src = `Image/360/4k/Jester.Main Camera.${formattedIndex}.png`;
     }
-});
+  });
 
 
-function updateImage() {
+  function updateImage() {
     if (!isZoomed && Math.abs(velocity) > 0.15) {
-        velocity *= Math.pow(friction, velocityMagnitude);
-        accumulatedMovement += velocity;
-        updateRotation();
+      velocity *= Math.pow(friction, velocityMagnitude);
+      accumulatedMovement += velocity;
+      updateRotation();
     }
-}
+  }
 
 
-function animate() {
+  function animate() {
     if (!isDragging) {
-        updateImage();
+      updateImage();
     }
     requestAnimationFrame(animate);
-}
+  }
 
-animate();
+  animate();
 
 }
 
@@ -320,50 +341,50 @@ function initViewer(container) {
     });
     scene.add(model);
     // Adjust camera position and controls
-  camera.position.set(0, 1, 5);
-  const environment = new RoomEnvironment(renderer);
-  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    camera.position.set(0, 1, 5);
+    const environment = new RoomEnvironment(renderer);
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
 
-  scene.background = new THREE.Color(0xffffff);
-  scene.environment = pmremGenerator.fromScene(environment).texture;
+    scene.background = new THREE.Color(0xffffff);
+    scene.environment = pmremGenerator.fromScene(environment).texture;
 
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.minDistance = 0.7;
-  controls.maxDistance = 10;
-  controls.update();
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.minDistance = 0.7;
+    controls.maxDistance = 10;
+    controls.update();
 
-  // Restrict camera panning
-  controls.enablePan = false;
-  controls.minPolarAngle = Math.PI / 4;
-  controls.maxPolarAngle = Math.PI / 2;
+    // Restrict camera panning
+    controls.enablePan = false;
+    controls.minPolarAngle = Math.PI / 4;
+    controls.maxPolarAngle = Math.PI / 2;
 
-  window.addEventListener('resize', onWindowResize);
+    window.addEventListener('resize', onWindowResize);
 
-  animate();
+    animate();
 
-  // Render the scene
-  function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-    console.log("Successfully loaded");
-
-  }
+    // Render the scene
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+      console.log("Successfully loaded");
+      hideLoading();
+    }
   });
 
-  
+
 }
 
 function onWindowResize() {
-    // Get the new width and height of the main media container
-    const newW = mainMediaContainer.clientWidth;
-    const newH = mainMediaContainer.clientHeight;
-  
-    // Update the camera's aspect ratio
-    camera.aspect = newW / newH;
-    camera.updateProjectionMatrix();
-  
-    // Update the renderer's size
-    renderer.setSize(newW, newH);
-  }
+  // Get the new width and height of the main media container
+  const newW = mainMediaContainer.clientWidth;
+  const newH = mainMediaContainer.clientHeight;
+
+  // Update the camera's aspect ratio
+  camera.aspect = newW / newH;
+  camera.updateProjectionMatrix();
+
+  // Update the renderer's size
+  renderer.setSize(newW, newH);
+}
 

@@ -90,6 +90,29 @@ p {
     position: relative;
 }
 
+#imageContainer {
+    position: relative; /* Added to position the child img correctly */
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Uncommented so that the overflow is hidden when the image is zoomed */
+    z-index: 1000;
+
+}
+
+#rotatingImage {
+    position: absolute; /* Added to enable precise positioning when dragged */
+    top: 0; /* Initially position at the top */
+    left: 0; /* Initially position at the left */
+    width: 100%; /* Adjusted from max-width to width to control the size more precisely */
+    height: 100%; /* Added to control the size more precisely */
+    display: block;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    cursor: grab; /* Added for better user experience */
+}
+
 .thumbnails-outer {
     width: 50vw; /* Changed to viewport width */
     overflow-x: auto;
