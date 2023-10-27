@@ -110,7 +110,9 @@ p {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
-    cursor: grab; /* Added for better user experience */
+    transition: transform 2s;
+    cursor: grab;
+    
 }
 
 .thumbnails-outer {

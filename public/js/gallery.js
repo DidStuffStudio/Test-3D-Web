@@ -73,6 +73,7 @@ function showMedia(index) {
     img.src = mediaPath;
     img.alt = 'Image';
     img.style.filter = "blur(10px)";
+    mainMedia.appendChild(img);
     img.onload = imageLoaded(img);
   }
 
@@ -124,17 +125,17 @@ function hideLoading() {
 
 
 function imageLoaded(img) {
-  mainMedia.appendChild(img);
+  
 
 
-  img.style.filter = 'blur(0px)';
-  hideLoading();
+  // img.style.filter = 'blur(0px)';
+  // hideLoading();
 
   // For testing
-  // setTimeout(function(){
-  //   img.style.filter = 'blur(0px)';
-  //   hideLoading();
-  // }, 1000)
+  setTimeout(function(){
+    img.style.filter = 'blur(0px)';
+    hideLoading();
+  }, 1000)
 
 }
 
@@ -189,6 +190,8 @@ function initialize360Viewer(data) {
 
 
   const img = document.getElementById('rotatingImage');
+  const container = document.getElementById('imageContainer');
+
   let isDragging = false;
   let isZoomed = false;
   let startIndex = 0;
@@ -211,26 +214,6 @@ function initialize360Viewer(data) {
     isDragging = false;
   });
 
-  img.addEventListener('mousemove', function (event) {
-    if (isDragging) {
-      if (isZoomed) {
-        // If zoomed in, adjust the image's position in both x and y directions
-        const containerRect = img.parentElement.getBoundingClientRect();
-        const imgRect = img.getBoundingClientRect();
-
-        offsetX = Math.min(Math.max(offsetX + event.movementX, containerRect.width - imgRect.width), 0);
-        offsetY = Math.min(Math.max(offsetY + event.movementY, containerRect.height - imgRect.height), 0);
-
-        img.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      } else {
-        // If zoomed out, rotate the image as before
-        accumulatedMovement += event.movementX;
-        velocity = +event.movementX * velocityMagnitude;
-        updateRotation();
-      }
-    }
-  });
-
 
   function updateRotation() {
     while (Math.abs(accumulatedMovement) >= threshold) {
@@ -245,49 +228,104 @@ function initialize360Viewer(data) {
     }
   }
 
+  
+  img.scale = 1;
+
   img.addEventListener('dblclick', function () {
-    let formattedIndex = getFormattedIndex(startIndex);  // Get the formatted index
+    let formattedIndex = getFormattedIndex(startIndex);  
     if (isZoomed) {
-      // If currently zoomed in, zoom out and reset transformations
-      img.style.transform = '';
-      img.style.objectFit = '';
-      img.style.width = ''; // Reset to original width
-      img.style.height = ''; // Reset to original height
-      isZoomed = false;
-      offsetX = 0;
-      offsetY = 0;
 
-
-      // Switch back to the appropriate low-resolution image
       img.src = `Image/360/2k/Jester.Main Camera.${formattedIndex}.png`;
+      img.style.transform = 'scale(1)';
+      img.scale = 1;
+      isZoomed = false;
+      img.style.cursor = "Grab";
+      img.style.left ='0px';
+      img.style.top = '0px';
+      
     } else {
       showLoading();
-      // If currently zoomed out, zoom in
 
-
-      // For testing
       setTimeout(function () {
-        img.style.objectFit = 'none';
-        img.style.width = '200%'; // Set to desired zoom level
-        img.style.height = '200%'; // Set to desired zoom level
+
+
+        img.src = `Image/360/4k/Jester.Main Camera.${formattedIndex}.png`;
+        img.style.transform = 'scale(5)';
+        img.scale = 5;
         isZoomed = true;
+        img.style.cursor = "Move";
+        
         img.onload = function () {
           hideLoading();
         }
-        img.src = `Image/360/4k/Jester.Main Camera.${formattedIndex}.png`;
       }
         , 1000)
-      // img.style.objectFit = 'none';
-      // img.style.width = '200%'; // Set to desired zoom level
-      // img.style.height = '200%'; // Set to desired zoom level
-      // isZoomed = true;
-      // img.onload = function() {
-      // hideLoading();
-      //}
-      // Switch to the high-resolution image
-      //img.src = `Image/360/4k/Jester.Main Camera.${formattedIndex}.png`;
     }
   });
+
+
+  let startX, startY, initialLeft, initialTop;
+
+img.addEventListener('mousedown', (event) => {
+    isDragging = true;
+    startX = event.clientX;
+    startY = event.clientY;
+    const style = window.getComputedStyle(img);
+    initialLeft = parseInt(style.left, 10);
+    initialTop = parseInt(style.top, 10);
+    
+    document.addEventListener('mousemove', onMouseMove);
+});
+
+
+
+
+
+function onMouseMove(event) {
+  if (isDragging && isZoomed) {
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+    console.log('Delta:', deltaX, deltaY);
+
+    const maxLeft = container.offsetWidth*2;
+    const maxTop = container.offsetHeight*2;
+
+    console.log('Max:', maxLeft, maxTop);
+
+    let newLeft = initialLeft + deltaX;
+    let newTop = initialTop + deltaY;
+    console.log('New:', newLeft, newTop);
+    if(newLeft < -maxLeft) newLeft = -maxLeft;
+    else if (newLeft > maxLeft) newLeft = maxLeft;
+    if(newTop < -maxTop) newTop = -maxTop;
+    else if (newTop > maxTop) newTop = maxTop;
+
+    img.style.left = newLeft + 'px';
+    img.style.top = newTop + 'px';
+}
+  else if(isDragging){
+    // If zoomed out, rotate the image as before
+    accumulatedMovement += event.movementX;
+    velocity = +event.movementX * velocityMagnitude;
+    updateRotation();
+  }
+};
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+  document.removeEventListener('mousemove', onMouseMove);
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
   function updateImage() {
