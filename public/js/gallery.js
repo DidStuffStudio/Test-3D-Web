@@ -132,10 +132,10 @@ function imageLoaded(img) {
   // hideLoading();
 
   // For testing
-  setTimeout(function(){
+  //setTimeout(function(){
     img.style.filter = 'blur(0px)';
     hideLoading();
-  }, 1000)
+  //}, 1000)
 
 }
 
@@ -246,7 +246,7 @@ function initialize360Viewer(data) {
     } else {
       showLoading();
 
-      setTimeout(function () {
+      // setTimeout(function () {
 
 
         img.src = `Image/360/4k/Jester.Main Camera.${formattedIndex}.png`;
@@ -258,8 +258,8 @@ function initialize360Viewer(data) {
         img.onload = function () {
           hideLoading();
         }
-      }
-        , 1000)
+      // }
+      //   , 1000)
     }
   });
 
