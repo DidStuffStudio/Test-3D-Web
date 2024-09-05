@@ -11,7 +11,7 @@ function initViewer(container) {
 
 
   // Define the path to your local GLB model
-  const modelPath = '../3D/JesterWood.glb'; // Adjust the path accordingly
+  const modelPath = '../3D/scene.glb'; // Adjust the path accordingly
 
   // Create a loader for GLB files
   const glbLoader = new GLTFLoader();

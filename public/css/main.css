@@ -52,6 +52,9 @@ p {
     text-align: center;
     margin-bottom: 1vh;  /* Changed to viewport height */
 }
+.main-image {
+    display: block; /* Ensures the image is a block-level element */
+  }
 
 .main-media img, .main-media video {
     width: 100%;
@@ -73,15 +76,16 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: relative;
+
 }
 
 .main-media-container
 {
     width: 50vw; /* Changed to viewport width */
     height: 37.5vw; /* Changed to viewport width */
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    /* border: 1px solid #ccc;
+    border-radius: 5px; */
     
     display: flex;
     justify-content: center;
@@ -119,7 +123,9 @@ p {
     width: 50vw; /* Changed to viewport width */
     overflow-x: auto;
     white-space: nowrap;
-    padding-bottom: 1vh;  /* Changed to viewport height */
+    padding-bottom: 1vh; 
+    overflow-y: auto;
+    z-index: 2000;
 }
 
 .thumbnails {
@@ -135,6 +141,8 @@ p {
     border-radius: 5px;
     cursor: pointer;
     transition: border-color 0.2s ease-in-out;
+    transition: transform 0.3s;
+
 }
 
 .thumbnail-item img {
@@ -145,6 +153,7 @@ p {
 
 .thumbnail-item:hover {
     border-color: #007BFF;
+    transform: scale(1.01);
 }
 
 .product-info {
@@ -319,3 +328,36 @@ p {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+
+
+#colorThumbnails {
+    position: absolute; /* Positions the thumbnails absolutely within the image container */
+    bottom: 0; /* Aligns the thumbnails to the bottom of the image container */
+    left: 50%; /* Centers the thumbnails horizontally within the container */
+    transform: translateX(-50%); /* Adjusts the horizontal alignment to be truly centered */
+    display: flex; /* Aligns thumbnails horizontally */
+    justify-content: center; /* Centers thumbnails within the container */
+    width: 15%; /* Makes the thumbnail container full width */
+    padding: 10px 0; /* Adds some space above and below the thumbnails */
+    box-sizing: border-box; /* Includes padding in the element's total width and height */
+    z-index: 1000; /* Ensures the thumbnails are above the image */
+  }
+  
+  .color-thumbnail {
+    width: 80px; /* Adjust size as needed */
+    height: 60px; /* Adjust size as needed */
+    margin: 0 5px; /* Space between thumbnails */
+    cursor: pointer;
+    object-fit: cover;
+    border: 1px solid transparent;
+    transition: border-color 0.3s;
+    transition: transform 0.3s;
+    border-radius: 1em;
+    
+  }
+  
+  .color-thumbnail:hover {
+    border-color: #007BFF; 
+    transform: scale(1.1); /* Slightly enlarges the thumbnail on hover */
+  }

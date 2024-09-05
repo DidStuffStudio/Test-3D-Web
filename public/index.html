@@ -25,82 +25,72 @@
 <body>
  
    
-    
     <div class="product-card">
         <div class="product-info">
-            <h1 style="color: black;">Jester Modular Sofa</h1>
-      <h2 style="color: black;" id="price">DKK 15.995</h2>
-      <p style="color: black;"><strong>Meet the Jester Modular Sofa</strong> - where comfort meets innovation. This
-        sofa, available in an
-        array of fabrics, effortlessly adapts to your living space.</p>
-      <p style="color: black;">What sets it apart is its unique, <strong>built-in tray armrest</strong>. Choose between
-        a natural wood or a 
-        sleek metal tray to keep your essentials within reach.</p>
-      <p style="color: black;">Experience luxury and convenience with the Jester Modular Sofa. Customize yours today.
-      </p>
-      <hr>
-      <button class="button">Add to cart</button>
+            <h1 style="color: black;">Bond Arm Chair</h1>
+            <h2 style="color: black;" id="price">USD 499</h2>
+            <p style="color: black;"><strong>Discover the Bond Arm Chair</strong> - a synthesis of luxury and comfort. This plush chair, upholstered in premium velvet, is perfect for elevating any corner of your home.</p>
+            <p style="color: black;">Featuring a unique, <strong>curved silhouette</strong>, this chair is supported by a distinct, sturdy base, blending modern aesthetics with timeless functionality.</p>
+            <p style="color: black;">Indulge in the soft embrace of the Bond Arm Chair. Available in select colors to match your decor.</p>
+            <hr>
+            <button class="button">Add to cart</button>
         </div>
+    
     <div class="gallery-container">
         <div class="main-media-container">
-            <button id="prevButton" class="nav-button prev-button">
+            <!-- <button id="prevButton" class="nav-button prev-button">
                 <img src="Image/icon/Arrow_white/arrow-30.png" alt="Image 1" class="arrow">
-            </button>
-            <button id="nextButton" class="nav-button next-button">
+            </button> -->
+            <!-- <button id="nextButton" class="nav-button next-button">
                 <img src="Image/icon/Arrow_white/arrow-30.png" alt="Image 1" class="arrow">
-            </button>
+            </button> -->
             <div class="main-media" id="mainMedia" draggable="false">
                 <div class="loading-overlay" id="loadingOverlay">
                     <div class="spinner"></div>
                     <p>Loading...</p>
                 </div>
-                
+                <div id="colorThumbnails"></div>
+
             </div>
 
         </div>
         
         <!-- <button id="prevButton" class="nav-button prev-button"></button>
         <button id="nextButton" class="nav-button next-button"></button> -->
-        <div class="thumbnails-outer">
-        <div class="thumbnails">
+        <div class="thumbnails-outer" id="thumbnails-outer">
+        <div class="thumbnails" id="thumbnails">
             <div class="thumbnail-item">
-                <img src="Image/Image_thumbnails/JesterAngleCamera.jpg" alt="Image 1">
+                <img src="Image/Bond_ArmChair_45Degree.jpg" alt="Image 1">
             </div>
             <div class="thumbnail-item">
-                <img src="Image/Image_thumbnails/Jester_Setting.jpg" alt="Image 2">
+                <img src="Image/240821_JF_hero shot Irvine sofa.jpg" alt="Image 2">
             </div>
 
             <div class="thumbnail-item">
-                <img src="Image/Image_thumbnails/3D_Thumbnail.png" alt="Image 2">
+                <img src="Image/360.png" alt="Image 2">
             </div>
             <div class="thumbnail-item">
                 <img src="Image/Image_thumbnails/Apartment_Thumbnail.png" alt="Image 3">
             </div>
 
             <div class="thumbnail-item">
-                <img src="Image/Image_thumbnails/ModularVid_Thumbnail.png" alt="Image 3">
+                <img src="Image/SofaVideo.png" alt="Image 3">
             </div>
 
             <div class="thumbnail-item">
                 <img src="Image/Image_thumbnails/Vogar_1_Swirl.png" alt="Image 4">
             </div>
             <div class="thumbnail-item">
-                <img src="Image/Image_thumbnails/JesterFrontCamera.jpg" alt="Image 6">
+                <img src="Image/Bond_ArmChair_Front.jpg" alt="Image 6">
             </div>
             <div class="thumbnail-item">
-                <img src="Image/Image_thumbnails/JesterSideCamera.jpg" alt="Image 7">
+                <img src="Image/Bond_ArmChair_Side.jpg" alt="Image 7">
             </div>
             <div class="thumbnail-item">
-                <img src="Image/Image_thumbnails/JesterBackCamera.jpg" alt="Image 8">
-            </div>
-            <div class="thumbnail-item">
-                <img src="Image/Image_thumbnails/SF215166_GND.png" alt="Image 9">
-            </div>
-            <div class="thumbnail-item">
-                <img src="Image/Image_thumbnails/SF215172_GND.png" alt="Image 10">
+                <img src="Image/Bond_Drawing.png" alt="Image 9">
             </div>
             <div class="thumbnail-item" data-media-type="3d" id="3dViewer">
-                <img src="Image/Image_thumbnails/3D_Thumbnail.png" alt="Image 2">
+                <img src="Image/3d.png" alt="Image 2">
             </div>
 
         </div>
@@ -110,6 +100,17 @@
     	
 
     <script type="module" src="js/gallery.js"></script>
+    <script>
+        document.getElementById('thumbnails-outer').addEventListener('wheel', function(event) {
+          if (event.deltaY != 0) {
+            // Prevent vertical scrolling
+            event.preventDefault();
+            // Scroll in a horizontal direction
+            this.scrollLeft += event.deltaY + (event.deltaX * 1.5);
+          }
+        });
+      </script>
+      
  
 </body>
 </html>
